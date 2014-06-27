@@ -22,7 +22,7 @@ PROJECT_FILENAME = '$NEW_PROJECT_FILENAME'
 
 # The name of the repository containing the source
 REPOSITORY_NAME = '$NEW_REPOSITORY_NAME'
-REPOSITORY_URL = 'git@github.com:nprapps/%s.git' % REPOSITORY_NAME
+REPOSITORY_URL = 'git@github.com:stlpublicradio/%s.git' % REPOSITORY_NAME
 REPOSITORY_ALT_URL = None # 'git@bitbucket.org:nprapps/%s.git' % REPOSITORY_NAME'
 
 # Project name used for assets rig
@@ -32,12 +32,12 @@ ASSETS_SLUG = '$NEW_PROJECT_SLUG'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['apps.npr.org', 'apps2.npr.org']
-STAGING_S3_BUCKETS = ['stage-apps.npr.org']
-ASSETS_S3_BUCKET = 'assets.apps.npr.org'
+PRODUCTION_S3_BUCKETS = ['stlpr-prod']
+STAGING_S3_BUCKETS = ['stlpr-stg']
+ASSETS_S3_BUCKET = 'stlpr-assets'
 
-PRODUCTION_SERVERS = ['cron.nprapps.org']
-STAGING_SERVERS = ['50.112.92.131']
+# PRODUCTION_SERVERS = ['cron.nprapps.org']
+# STAGING_SERVERS = ['50.112.92.131']
 
 # Should code be deployed to the web/cron servers?
 DEPLOY_TO_SERVERS = False
@@ -102,7 +102,7 @@ NPR_DFP = {
 SERVICES
 """
 GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-5828686-4',
+    'ACCOUNT_ID': 'UA-2139719-2',
     'DOMAIN': PRODUCTION_S3_BUCKETS[0],
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
@@ -148,21 +148,21 @@ def configure_targets(deployment_target):
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVERS = PRODUCTION_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        DISQUS_SHORTNAME = 'npr-news'
+        DISQUS_SHORTNAME = ''
         DEBUG = False
     elif deployment_target == 'staging':
         S3_BUCKETS = STAGING_S3_BUCKETS
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
         SERVERS = STAGING_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        DISQUS_SHORTNAME = 'nprviz-test'
+        DISQUS_SHORTNAME = ''
         DEBUG = True
     else:
         S3_BUCKETS = []
         S3_BASE_URL = 'http://127.0.0.1:8000'
         SERVERS = []
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
-        DISQUS_SHORTNAME = 'nprviz-test'
+        DISQUS_SHORTNAME = ''
         DEBUG = True
         APP_LOG_PATH = '/tmp/%s.app.log' % PROJECT_SLUG
 
