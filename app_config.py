@@ -32,7 +32,7 @@ ASSETS_SLUG = '$NEW_PROJECT_SLUG'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['stlpr-prod']
+PRODUCTION_S3_BUCKETS = ['apps.stlpublicradio.org']
 STAGING_S3_BUCKETS = ['stlpr-stg']
 ASSETS_S3_BUCKET = 'stlpr-assets'
 
@@ -91,12 +91,12 @@ SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 ADS
 """
 
-NPR_DFP = {
-    'STORY_ID': '1002',
-    'TARGET': 'homepage',
-    'ENVIRONMENT': 'NPRTEST',
-    'TESTSERVER': 'false'
-}
+# NPR_DFP = {
+#    'STORY_ID': '1002',
+#    'TARGET': 'homepage',
+#    'ENVIRONMENT': 'NPRTEST',
+#    'TESTSERVER': 'false'
+# }
 
 """
 SERVICES
@@ -107,7 +107,7 @@ GOOGLE_ANALYTICS = {
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
 
-DISQUS_UUID = '$NEW_DISQUS_UUID'
+# DISQUS_UUID = '$NEW_DISQUS_UUID'
 
 """
 Utilities

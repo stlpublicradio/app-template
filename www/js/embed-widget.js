@@ -6,7 +6,7 @@ var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "htt
 document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
 
 try {
-        var pageTracker = _gat._getTracker("UA-5828686-3");
+        var pageTracker = _gat._getTracker("UA-2139719-2");
         pageTracker._setDomainName("none");
         pageTracker._setAllowLinker(true);
         pageTracker._setCustomVar(1,"Module","TODO",3);
@@ -16,19 +16,18 @@ try {
 
 /* check for user-defined width */
 try {
-	if (nprapps_widget_width) {}
+	if (stlpr_widget_width) {}
 } catch (err) {
-	nprapps_widget_width = '300';
+	stlpr_widget_width = '300';
 }
 
 try {
-	if (nprapps_widget_height) {}
+	if (stlpr_widget_height) {}
 } catch (err) {
-	nprapps_widget_height = '500';
+	stlpr_widget_height = '500';
 }
 
 document.write(
 '<script type="text/javascript">window.vsitag = {"imp":"TODO"};</script>',
-'<script type="text/javascript" language="javascript" src="http://www.npr.org/include/javascript/zigi.js"></script>',
-'<iframe src="widget.html?station=' + window.station + '" width="' + nprapps_widget_width + '" height="' + nprapps_widget_height + '" scrolling="auto" marginheight="0" marginwidth="0" frameborder="0" style="border: 1px solid #CCC;" ></iframe>',
+'<iframe src="widget.html?station=' + window.station + '" width="' + stlpr_widget_width + '" height="' + stlpr_widget_height + '" scrolling="auto" marginheight="0" marginwidth="0" frameborder="0" style="border: 1px solid #CCC;" ></iframe>',
 '');
