@@ -79,7 +79,7 @@ DEBUG = True
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
+COPY_GOOGLE_DOC_KEY = '0Ahk37aM1t_GZdE4yXzJjU2NQT0lWdzhfSmxxcE9meWc'
 COPY_PATH = 'data/copy.xlsx'
 
 """
@@ -87,10 +87,10 @@ SHARING
 """
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 
-"""
-ADS
-"""
-
+# """
+# ADS
+# """
+# 
 # NPR_DFP = {
 #    'STORY_ID': '1002',
 #    'TARGET': 'homepage',
@@ -102,7 +102,7 @@ ADS
 SERVICES
 """
 GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-2139719-2',
+    'ACCOUNT_ID': 'UA-52532220-1',
     'DOMAIN': PRODUCTION_S3_BUCKETS[0],
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
