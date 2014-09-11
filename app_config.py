@@ -22,7 +22,8 @@ PROJECT_FILENAME = '$NEW_PROJECT_FILENAME'
 
 # The name of the repository containing the source
 REPOSITORY_NAME = '$NEW_REPOSITORY_NAME'
-REPOSITORY_URL = 'git@github.com:stlpublicradio/%s.git' % REPOSITORY_NAME
+GITHUB_USERNAME = 'stlpublicradio'
+REPOSITORY_URL = 'git@github.com:%s/%s.git' % (GITHUB_USERNAME, REPOSITORY_NAME)
 REPOSITORY_ALT_URL = None # 'git@bitbucket.org:nprapps/%s.git' % REPOSITORY_NAME'
 
 # Project name used for assets rig
@@ -32,9 +33,24 @@ ASSETS_SLUG = '$NEW_PROJECT_SLUG'
 """
 DEPLOYMENT
 """
-PRODUCTION_S3_BUCKETS = ['apps.stlpublicradio.org']
-STAGING_S3_BUCKETS = ['stlpr-stg']
-ASSETS_S3_BUCKET = 'stlpr-assets'
+PRODUCTION_S3_BUCKETS = [
+    {
+        'bucket_name': 'apps.stlpublicradio.org',
+        'region': 'us-east-1'
+    }
+]
+
+STAGING_S3_BUCKETS = [
+    {
+        'bucket_name': 'stlpr-stg',
+        'region': 'us-east-1'
+    }
+]
+
+ASSETS_S3_BUCKET = {
+    'bucket_name': 'stlpr-assets',
+    'region': 'us-east-1'
+}
 
 PRODUCTION_SERVERS = ['']
 STAGING_SERVERS = ['']
@@ -79,7 +95,7 @@ DEBUG = True
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_KEY = '0Ahk37aM1t_GZdE4yXzJjU2NQT0lWdzhfSmxxcE9meWc'
+COPY_GOOGLE_DOC_URL = 'https://docs.google.com/spreadsheet/ccc?key=0Ahk37aM1t_GZdE4yXzJjU2NQT0lWdzhfSmxxcE9meWc'
 COPY_PATH = 'data/copy.xlsx'
 
 """
@@ -102,12 +118,15 @@ SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 SERVICES
 """
 GOOGLE_ANALYTICS = {
-    'ACCOUNT_ID': 'UA-52532220-1',
+    'ACCOUNT_ID': 'UA-2139719-1',
     'DOMAIN': PRODUCTION_S3_BUCKETS[0],
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
 
-# DISQUS_UUID = '$NEW_DISQUS_UUID'
+
+#DISQUS_API_KEY = ''
+#DISQUS_UUID = ''
+
 
 """
 Utilities
@@ -145,14 +164,14 @@ def configure_targets(deployment_target):
 
     if deployment_target == 'production':
         S3_BUCKETS = PRODUCTION_S3_BUCKETS
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0]['bucket_name'], PROJECT_SLUG)
         SERVERS = PRODUCTION_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         DISQUS_SHORTNAME = ''
         DEBUG = False
     elif deployment_target == 'staging':
         S3_BUCKETS = STAGING_S3_BUCKETS
-        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0], PROJECT_SLUG)
+        S3_BASE_URL = 'http://%s/%s' % (S3_BUCKETS[0]['bucket_name'], PROJECT_SLUG)
         SERVERS = STAGING_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         DISQUS_SHORTNAME = ''

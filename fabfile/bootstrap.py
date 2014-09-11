@@ -11,10 +11,12 @@ import uuid
 
 from fabric.api import execute, local, task
 
+import app_config
 import utils
 
 @task(default=True)
-def go(github_username='stlpublicradio', repository_name=None):
+def go(github_username=app_config.GITHUB_USERNAME, repository_name=None):
+
     """
     Execute the bootstrap tasks for a new project.
     """
@@ -37,7 +39,7 @@ def go(github_username='stlpublicradio', repository_name=None):
     local('rm *.pyc')
     local('rm LICENSE')
     local('git add .')
-    local('git add -f www/assets/.assetsignore')
+    local('git add -f www/assets/assetsignore')
     local('git commit -am "Initial import from app-template."')
     local('git remote add origin git@github.com:%s/%s.git' % (github_username, config['$NEW_REPOSITORY_NAME']))
     local('git push -u origin master')

@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 
+import json
+
 import argparse
 from flask import Flask, render_template
 
 import app_config
-from render_utils import make_context, urlencode_filter
+from render_utils import make_context, smarty_filter, urlencode_filter
 import static
 
 app = Flask(__name__)
 
+app.jinja_env.filters['smarty'] = smarty_filter
 app.jinja_env.filters['urlencode'] = urlencode_filter
 
 # Example application views
@@ -17,7 +20,12 @@ def index():
     """
     Example view demonstrating rendering a simple HTML page.
     """
-    return render_template('index.html', **make_context())
+    context = make_context()
+
+    with open('data/featured.json') as f:
+        context['featured'] = json.load(f)
+
+    return render_template('index.html', **context)
 
 @app.route('/widget.html')
 def widget():
@@ -33,10 +41,6 @@ def test_widget():
     """
     return render_template('test_widget.html', **make_context())
 
-@app.route('/test/test.html')
-def test_dir():
-    return render_template('index.html', **make_context())
-    
 app.register_blueprint(static.static)
 
 # Boilerplate

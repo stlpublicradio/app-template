@@ -100,7 +100,7 @@ Project secrets should **never** be stored in ``app_config.py`` or anywhere else
 Save media assets
 -----------------
 
-Large media assets (images, videos, audio) are synced with an Amazon S3 bucket called ```assets.apps.npr.org``` in a folder with the name of the project. This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
+Large media assets (images, videos, audio) are synced with an Amazon S3 bucket specified in ``app_config.ASSETS_S3_BUCKET`` in a folder with the name of the project. (This bucket should not be the same as any of your ``app_config.PRODUCTION_S3_BUCKETS`` or ``app_config.STAGING_S3_BUCKETS``.) This allows everyone who works on the project to access these assets without storing them in the repo, giving us faster clone times and the ability to open source our work.
 
 Syncing these assets requires running a couple different commands at the right times. When you create new assets or make changes to current assets that need to get uploaded to the server, run ```fab assets.sync```. This will do a few things:
 
@@ -359,10 +359,11 @@ The Google Analytics events tracked in this application are:
 |--------|------|-----|-----|--------|--------|
 |$NEW_PROJECT_SLUG|tweet|`location`||||
 |$NEW_PROJECT_SLUG|facebook|`location`||||
-|$NEW_PROJECT_SLUG|comments_opened|||||
-|$NEW_PROJECT_SLUG|comments_closed||``seconds_open``|||
-|$NEW_PROJECT_SLUG|comments_open_for|``seconds_open``|||
+|$NEW_PROJECT_SLUG|email|`location`||||
+|$NEW_PROJECT_SLUG|new-comment||||
+|$NEW_PROJECT_SLUG|open-share-discuss||||
+|$NEW_PROJECT_SLUG|close-share-discuss||||
+|$NEW_PROJECT_SLUG|summary-copied||||
+|$NEW_PROJECT_SLUG|featured-tweet-action|`action`||``tweet_url``|
+|$NEW_PROJECT_SLUG|featured-facebook-action|`action`||``post_url``|
 
-**Notes:**
-
-* The *comments_read* action is fired once the comments pane has been open for at least ten seconds.
