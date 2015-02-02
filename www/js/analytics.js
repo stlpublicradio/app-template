@@ -1,6 +1,7 @@
 /*
- * Google Analytics
+ * Module for tracking standardized analytics.
  */
+
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', APP_CONFIG.GOOGLE_ANALYTICS.ACCOUNT_ID]);
 _gaq.push(['_setDomainName', APP_CONFIG.GOOGLE_ANALYTICS.DOMAIN]);
