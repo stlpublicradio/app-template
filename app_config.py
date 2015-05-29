@@ -10,6 +10,10 @@ See get_secrets() below for a fast way to access them.
 
 import os
 
+from authomatic.providers import oauth2
+from authomatic import Authomatic
+
+
 """
 NAMES
 """
@@ -48,8 +52,7 @@ ASSETS_S3_BUCKET = {
     'region': 'us-east-1'
 }
 
-DEFAULT_MAX_AGE = 20 
-ASSETS_MAX_AGE = 86400
+DEFAULT_MAX_AGE = 20
 
 PRODUCTION_SERVERS = ['']
 STAGING_SERVERS = ['']
@@ -83,18 +86,18 @@ SERVER_SERVICES = [
 ]
 
 # These variables will be set at runtime. See configure_targets() below
-S3_BUCKET = None 
-S3_BASE_URL = None 
+S3_BUCKET = None
+S3_BASE_URL = None
 S3_DEPLOY_URL = None
 SERVERS = []
 SERVER_BASE_URL = None
-SERVER_LOG_PATH = None 
+SERVER_LOG_PATH = None
 DEBUG = True
 
 """
 COPY EDITING
 """
-COPY_GOOGLE_DOC_URL = 'https://docs.google.com/spreadsheet/ccc?key=0Ahk37aM1t_GZdE4yXzJjU2NQT0lWdzhfSmxxcE9meWc'
+COPY_GOOGLE_DOC_KEY = '0AlXMOHKxzQVRdHZuX1UycXplRlBfLVB0UVNldHJYZmc'
 COPY_PATH = 'data/copy.xlsx'
 
 """
@@ -116,16 +119,36 @@ SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKET['bucket_name'], PROJECT_SLUG
 """
 SERVICES
 """
-GOOGLE_ANALYTICS = {
+
+
+NPR_GOOGLE_ANALYTICS = {
     'ACCOUNT_ID': 'UA-2139719-1',
     'DOMAIN': PRODUCTION_S3_BUCKET['bucket_name'],
     'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
 }
 
-
 #DISQUS_API_KEY = ''
 #DISQUS_UUID = ''
 
+
+"""
+OAUTH
+"""
+
+GOOGLE_OAUTH_CREDENTIALS_PATH = '~/.google_oauth_credentials'
+
+authomatic_config = {
+    'google': {
+        'id': 1,
+        'class_': oauth2.Google,
+        'consumer_key': os.environ.get('GOOGLE_OAUTH_CLIENT_ID'),
+        'consumer_secret': os.environ.get('GOOGLE_OAUTH_CONSUMER_SECRET'),
+        'scope': ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/userinfo.email'],
+        'offline': True,
+    },
+}
+
+authomatic = Authomatic(authomatic_config, os.environ.get('AUTHOMATIC_SALT'))
 
 """
 Utilities
@@ -134,15 +157,12 @@ def get_secrets():
     """
     A method for accessing our secrets.
     """
-    secrets = [
-        'EXAMPLE_SECRET'
-    ]
-
     secrets_dict = {}
 
-    for secret in secrets:
-        name = '%s_%s' % (PROJECT_FILENAME, secret)
-        secrets_dict[secret] = os.environ.get(name, None)
+    for k,v in os.environ.items():
+        if k.startswith(PROJECT_SLUG):
+            k = k[len(PROJECT_SLUG) + 1:]
+            secrets_dict[k] = v
 
     return secrets_dict
 
@@ -160,6 +180,7 @@ def configure_targets(deployment_target):
     global DEBUG
     global DEPLOYMENT_TARGET
     global DISQUS_SHORTNAME
+    global ASSETS_MAX_AGE
 
     if deployment_target == 'production':
         S3_BUCKET = PRODUCTION_S3_BUCKET
@@ -169,6 +190,7 @@ def configure_targets(deployment_target):
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         DISQUS_SHORTNAME = ''
         DEBUG = False
+        ASSETS_MAX_AGE = 86400
     elif deployment_target == 'staging':
         S3_BUCKET = STAGING_S3_BUCKET
         S3_BASE_URL = 'http://%s/%s' % (S3_BUCKET['bucket_name'], PROJECT_SLUG)
@@ -177,14 +199,16 @@ def configure_targets(deployment_target):
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
         DISQUS_SHORTNAME = ''
         DEBUG = True
+        ASSETS_MAX_AGE = 20
     else:
         S3_BUCKET = None
         S3_BASE_URL = 'http://127.0.0.1:8000'
-        S3_DEPLOY_URL = None 
+        S3_DEPLOY_URL = None
         SERVERS = []
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
         DISQUS_SHORTNAME = ''
         DEBUG = True
+        ASSETS_MAX_AGE = 20
 
     DEPLOYMENT_TARGET = deployment_target
 
@@ -194,4 +218,3 @@ Run automated configuration
 DEPLOYMENT_TARGET = os.environ.get('DEPLOYMENT_TARGET', None)
 
 configure_targets(DEPLOYMENT_TARGET)
-

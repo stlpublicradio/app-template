@@ -93,14 +93,14 @@ def app(port='8000'):
     """
     Serve app.py.
     """
-    local('gunicorn -b 0.0.0.0:%s --debug --reload app:wsgi_app' % port)
+    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --debug --reload app:wsgi_app' % port)
 
 @task
 def public_app(port='8001'):
     """
     Serve public_app.py.
     """
-    local('gunicorn -b 0.0.0.0:%s --debug --reload public_app:wsgi_app' % port)
+    local('gunicorn -b 0.0.0.0:%s --timeout 3600 --debug --reload public_app:wsgi_app' % port)
 
 @task
 def tests():
@@ -161,14 +161,18 @@ def deploy(remote='origin'):
     flat.deploy_folder(
         'www',
         app_config.PROJECT_SLUG,
-        max_age=app_config.DEFAULT_MAX_AGE,
-        ignore=['www/assets/*']
+        headers={
+            'Cache-Control': 'max-age=%i' % app_config.DEFAULT_MAX_AGE
+        },
+        ignore=['www/assets/*', 'www/live-data/*']
     )
 
     flat.deploy_folder(
         'www/assets',
         '%s/assets' % app_config.PROJECT_SLUG,
-        max_age=app_config.ASSETS_MAX_AGE
+        headers={
+            'Cache-Control': 'max-age=%i' % app_config.ASSETS_MAX_AGE
+        }
     )
 
 
@@ -192,7 +196,7 @@ def shiva_the_destroyer():
     )
 
     with settings(warn_only=True):
-        flat.delete_folder(app_config.PROJECT_SLUG) 
+        flat.delete_folder(app_config.PROJECT_SLUG)
 
         if app_config.DEPLOY_TO_SERVERS:
             servers.delete_project()
