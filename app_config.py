@@ -8,6 +8,7 @@ They will be exposed to users. Use environment variables instead.
 See get_secrets() below for a fast way to access them.
 """
 
+import logging
 import os
 
 from authomatic.providers import oauth2
@@ -99,16 +100,6 @@ SHARING
 """
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKET, PROJECT_SLUG)
 
-# """
-# ADS
-# """
-#
-# NPR_DFP = {
-#    'STORY_ID': '1002',
-#    'TARGET': 'homepage',
-#    'ENVIRONMENT': 'NPRTEST',
-#    'TESTSERVER': 'false'
-# }
 
 """
 SERVICES
@@ -145,6 +136,11 @@ authomatic_config = {
 authomatic = Authomatic(authomatic_config, os.environ.get('AUTHOMATIC_SALT'))
 
 """
+Logging
+"""
+LOG_FORMAT = '%(levelname)s:%(name)s:%(asctime)s: %(message)s'
+
+"""
 Utilities
 """
 def get_secrets():
@@ -173,7 +169,7 @@ def configure_targets(deployment_target):
     global SERVER_LOG_PATH
     global DEBUG
     global DEPLOYMENT_TARGET
-    global DISQUS_SHORTNAME
+    global LOG_LEVEL
     global ASSETS_MAX_AGE
 
     if deployment_target == 'production':
@@ -182,7 +178,8 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
         SERVERS = PRODUCTION_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        DISQUS_SHORTNAME = ''
+        SERVER_LOG_PATH = '/var/log/%s' % PROJECT_FILENAME
+        LOG_LEVEL = logging.WARNING
         DEBUG = False
         ASSETS_MAX_AGE = 86400
     elif deployment_target == 'staging':
@@ -191,7 +188,8 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = 's3://%s/%s' % (S3_BUCKET, PROJECT_SLUG)
         SERVERS = STAGING_SERVERS
         SERVER_BASE_URL = 'http://%s/%s' % (SERVERS[0], PROJECT_SLUG)
-        DISQUS_SHORTNAME = ''
+        SERVER_LOG_PATH = '/var/log/%s' % PROJECT_FILENAME
+        LOG_LEVEL = logging.DEBUG
         DEBUG = True
         ASSETS_MAX_AGE = 20
     else:
@@ -200,7 +198,8 @@ def configure_targets(deployment_target):
         S3_DEPLOY_URL = None
         SERVERS = []
         SERVER_BASE_URL = 'http://127.0.0.1:8001/%s' % PROJECT_SLUG
-        DISQUS_SHORTNAME = ''
+        SERVER_LOG_PATH = '/tmp'
+        LOG_LEVEL = logging.DEBUG
         DEBUG = True
         ASSETS_MAX_AGE = 20
 

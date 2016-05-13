@@ -16,10 +16,9 @@
     {% include '_fonts.html' %}
 
     <!-- CSS -->
-	{{ CSS.push('less/app.less') }}
-    {% block extra_css %}
-	{% endblock extra_css %}
-    {{ CSS.render('css/app.min.css') }}
+    {{ CSS.push('less/app.less') }}
+    {% block extra_css %}{% endblock extra_css %}
+    {{ CSS.render('css/rendered/app.min.css') }}
 
     <!-- JS -->
     {{ JS.push('js/lib/modernizr.js') }}
@@ -33,6 +32,10 @@
 </head>
 <body>
     <!-- ANALYTICS JAVASCRIPT -->
+    {{ JS.push('js/lib/modernizr.js') }}
+    {{ JS.push('js/lib/cookie.js') }}
+    {{ JS.push('js/lib/es6-promise.js') }}
+    {{ JS.push('js/lib/cross-storage-client.js') }}
     {{ JS.push('js/app_config.js') }}
     {{ JS.push('js/analytics.js') }}
     {{ JS.render('js/app-header.min.js') }}
@@ -43,32 +46,22 @@
 
 	{% include '_header.html' %}
 
-    <section id="content">
-                <div id="main-content">
-                    {% block content %}
-                    <h1>{{ project_name }}</h1>
-                    App content goes here.
+    {% block header_content %}
+    {% endblock header_content %}
 
-                    <i class="icon icon-play"></i>
-                    {% endblock content %}
-                </div>
-            {% block wide_content %}
-            {% endblock wide_content %}
-    </section>
+    {% block content %}
+    {% endblock content %}
+
 
     {% include '_footer.html' %}
 
 
     {% endblock outer_content %}
 
+
     {{ JS.push('js/lib/jquery.js') }}
     {{ JS.push('js/lib/underscore.js') }}
-    {{ JS.push('js/lib/modernizr.js') }}
-    {{ JS.push('js/lib/bootstrap.js') }}
     {{ JS.push('js/lib/moment.js') }}
-
-    {# commented out ZeroClipboard.js - bj 2015-07-14 #}
-    {# {{ JS.push('js/lib/ZeroClipboard.js') }} #}
 
     {# uncomment both files to use simpleStorage #}
     {# {{ JS.push('js/lib/simpleStorage.js') }} #}
@@ -87,5 +80,9 @@
     {% block extra_foot %}
     {% endblock extra_foot %}
 
+    {# Setup Chartbeat last! #}
+    <script type="text/javascript">
+        $(ANALYTICS.setupChartbeat);
+    </script>
 </body>
 </html>
